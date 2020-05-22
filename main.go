@@ -11,11 +11,11 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/golang/glog"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/mkmik/stringlist"
+	"k8s.io/klog"
 )
 
 var (
@@ -60,12 +60,13 @@ func run(fileName string, protoMessage string, importPaths []string, src string)
 }
 
 func main() {
-	defer glog.Flush()
+	klog.InitFlags(nil)
+	defer klog.Flush()
 
 	flag.Parse()
 	src := flag.Arg(0)
 
 	if err := run(*protoFileName, *protoMessage, *importPaths, src); err != nil {
-		glog.Exitf("%v", err)
+		klog.Exitf("%v", err)
 	}
 }
