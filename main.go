@@ -8,13 +8,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 
 	"github.com/golang/glog"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
-	"github.com/juju/errors"
 	"github.com/mkmik/stringlist"
 )
 
@@ -39,21 +39,21 @@ func run(fileName string, protoMessage string, importPaths []string, src string)
 	}
 	fds, err := p.ParseFiles(fileName)
 	if err != nil {
-		return errors.Trace(err)
+		return fmt.Errorf("parsing %q: %w", fileName, err)
 	}
 	md := findMessage(fds, protoMessage)
 
 	if md == nil {
-		return errors.Errorf("cannot find message %q", protoMessage)
+		return fmt.Errorf("cannot find message %q", protoMessage)
 	}
 	m := dynamic.NewMessage(md)
 
 	b, err := ioutil.ReadFile(src)
 	if err != nil {
-		return errors.Trace(err)
+		return fmt.Errorf("reading file %q: %w", src, err)
 	}
 	if err := m.UnmarshalJSON(b); err != nil {
-		return errors.Trace(err)
+		return fmt.Errorf("parsing %q: %w", src, err)
 	}
 
 	return nil
@@ -66,7 +66,6 @@ func main() {
 	src := flag.Arg(0)
 
 	if err := run(*protoFileName, *protoMessage, *importPaths, src); err != nil {
-		glog.Infof("%+v", err)
 		glog.Exitf("%v", err)
 	}
 }
