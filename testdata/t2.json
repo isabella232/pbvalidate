@@ -1,3 +1,4 @@
 {
-  "baz": "ok"
+  "baz": "ok",
+  "arrayOfInt": [1234, "6666"]
 }
