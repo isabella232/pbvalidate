@@ -1,4 +1,4 @@
 {
   "baz": "ok",
-  "qux": 2
+  "camelcase_property": "This works because it fallsback"
 }

@@ -4,4 +4,6 @@ package foo;
 
 message Bar {
   string baz = 1;
+  string camelcase_property = 2;
+  repeated int32 array_of_int = 3;
 }
